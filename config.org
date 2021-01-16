@@ -1,0 +1,387 @@
+* config edit/reload
+** edit
+#+BEGIN_SRC emacs-lisp
+  (defun config-visit ()
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+
+  (global-set-key (kbd "C-c e") 'config-visit)
+#+END_SRC
+** reload
+#+BEGIN_SRC emacs-lisp
+  (defun config-reload ()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+  (global-set-key (kbd "C-c r") 'config-reload)
+#+END_SRC
+* Misc
+** electric-pair
+ #+BEGIN_SRC emacs-lisp
+   (setq electric-pair-pairs '(
+			       (?\( . ?\))
+			       (?\[ . ?\])
+			       (?\{ . ?\})
+			       ))
+   (electric-pair-mode t)
+ #+END_SRC
+** kill ring
+#+BEGIN_SRC emacs-lisp
+  (use-package popup-kill-ring
+    :ensure t
+    :bind ("M-y" . popup-kill-ring))
+#+END_SRC
+** remove toolbar, menubar scrollbar
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+#+END_SRC
+** show line number and column number
+#+BEGIN_SRC emacs-lisp
+(global-linum-mode 1)
+(column-number-mode 1)
+#+END_SRC
+** Change yes-or-no questions into y-or-n questions
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+** remove startup screen
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-screen t)
+#+END_SRC
+** disable bell
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+** utf-8 encoding
+#+BEGIN_SRC emacs-lisp
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (set-buffer-file-coding-system 'dos)
+#+END_SRC
+** highlight current line
+#+BEGIN_SRC emacs-lisp
+  (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
+#+END_SRC
+** recent-open-files
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<f5>") 'recentf-open-files)
+#+END_SRC
+** new empty buffer
+#+BEGIN_SRC emacs-lisp
+  (defun yu/new-empty-buffer ()
+    (interactive)
+    (let (($buf (generate-new-buffer "untitled")))
+      (switch-to-buffer $buf)
+      (funcall initial-major-mode)
+      $buf
+      ))
+
+  (global-set-key (kbd "<f7>") 'yu/new-empty-buffer)
+#+END_SRC
+** full screen after startup
+#+BEGIN_SRC emacs-lisp
+  (toggle-frame-fullscreen)
+#+END_SRC
+** show buffer file name
+#+begin_src emacs-lisp
+  (setq frame-title-format
+	(list (format "%s %%S: %%j " (system-name))
+	      '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+#+end_src
+* Async
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :ensure t
+    :init (dired-async-mode 1))
+#+END_SRC
+* which-key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode))
+#+END_SRC
+* beacon
+#+BEGIN_SRC emacs-lisp
+(use-package beacon
+  :ensure t
+  :init
+  (beacon-mode 1)
+  :config
+  (setq beacon-push-mark 25)
+  (setq beacon-color "#666600"))
+#+END_SRC
+* Org
+** basic config
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-window-setup 'current-window)
+
+  (add-hook 'org-mode-hook '(lambda () (visual-line-mode 1)))
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (setq org-catch-invisible-edits 'show)
+
+  (require 'ob-python)
+  (org-babel-do-load-languages
+   'org-babel-load-languages '(
+			       (emacs-lisp . t )
+			       (C . t)
+			       (python . t)))
+
+  (setq org-directory "c:/devel/oneiress/kb")
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  ; (setq org-agenda-include-diary t)
+#+END_SRC
+** org-bullets
+ #+BEGIN_SRC emacs-lisp
+ (use-package org-bullets
+   :ensure t
+   :config
+   (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
+ #+END_SRC
+** htmlize
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :ensure t)
+#+END_SRC
+* Ivy -- A better and generic completion mechanism
+** ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (setq ivy-initial-inputs-alist nil)
+    (setq ivy-height 15)
+    (global-set-key (kbd "<f6>") 'ivy-resume)
+    (setq ivy-count-format "%d/%d ")
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer-other-window))
+#+END_SRC
+** counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :config
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-c j") 'counsel-git-grep))
+#+END_SRC
+** swiper
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :after ivy
+    :bind (("C-s" . swiper)
+	   ("C-r" . swiper)))
+#+END_SRC
+* Magit
+** magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :config
+    (global-set-key (kbd "C-x g") 'magit-status)
+    (setq magit-completing-read-function 'ivy-completing-read)
+    :diminish auto-revert-mode)
+#+END_SRC
+** gitignore
+#+BEGIN_SRC emacs-lisp
+  (use-package gitignore-mode
+    :ensure t
+    :config
+    (add-hook 'gitignore-mode-hook (lambda () (setq require-final-newline t))))
+#+END_SRC
+* projectile
+** counsel-projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :ensure t
+    :config
+    (counsel-projectile-mode)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+  ;; Use alien indexing to improve performance in Windows
+  ;; Note: 'alien indexing method will ignore the contents or projectile
+  ;; https://docs.projectile.mx/en/stable/configuration/
+  (setq projectile-indexing-method 'alien)
+  (setq counsel-projectile-sort-files t)
+#+END_SRC
+* avy
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :ensure t
+    :bind
+    ("M-s" . avy-goto-char))
+#+END_SRC
+* expand region
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind ("C-q" . er/expand-region))
+#+END_SRC
+* show parens -- highlight paired parenthese
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode 1)
+#+END_SRC
+* rainbow
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-mode
+    :ensure t
+    :init (rainbow-mode 1))
+#+END_SRC
+* ace-window 
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind
+    ([remap other-window] . ace-window))
+#+END_SRC
+* hungry-delete
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :ensure t
+    :config (global-hungry-delete-mode))
+#+END_SRC
+* dashboard
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq dashboard-items '((recents . 5)
+			    (projects . 5)
+			    (bookmarks .5)
+			    (agenda . 5)
+			    (registers . 5)))
+    (setq dashboard-startup-banner"~/.emacs.d/logo_rs.jpeg")
+    (setq dashboard-banner-logo-title "I LOVE EMACS !")
+    ;(setq dashboard-set-heading-icons t)
+    ;(setq dashboard-set-file-icons t)
+    (setq dashboard-set-navigator t))
+#+END_SRC
+* auto completion
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :config
+    (setq company-idle-delay 1)
+    (setq company-minimum-prefix-length 2))
+
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous)
+    (define-key company-active-map (kbd "SPC") #'company-abort))
+
+  (add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+* modeline
+** spaceline -- Beautiful spacemacs style status bar
+ #+BEGIN_SRC emacs-lisp
+   (use-package spaceline
+     :ensure t
+     :config
+     (require 'spaceline-config)
+     (setq spaceline-buffer-encoding-abbrev-p nil)
+     ;(setq spaceline-line-column-p nil)
+     ;(setq spaceline-line-p nil)
+     (setq powerline-default-separator (quote arrow))
+     (spaceline-spacemacs-theme))
+
+   (setq powerline-default-separator nil)
+ #+END_SRC
+** diminish -- Do not display some modes information in status bar
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :ensure t
+    :init
+    (diminish 'hungry-delete-mode)
+    (diminish 'beacon-mode)
+    (diminish 'which-key-mode)
+    (diminish 'rainbow-mode))
+#+END_SRC
+* flycheck -- syntax checking
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t)
+#+END_SRC
+* clock
+#+BEGIN_SRC emacs-lisp
+(setq display-time-24hr-format t)
+(setq display-time-format "%H:%M - %d %B %Y")
+
+(display-time-mode 1)
+#+END_SRC
+* text manipulation
+** Mark multiple
+#+BEGIN_SRC emacs-lisp
+  (use-package mark-multiple
+    :ensure t
+    :bind (("C-<" . 'mark-previous-like-this)
+	   ("C->" . 'mark-next-like-this)
+	   ("C-M-m" . 'mark-more-like-this)
+	   ("C-*" . 'mark-all-like-this)))
+#+END_SRC
+** kill whole word no matter where the cursor is
+#+BEGIN_SRC emacs-lisp
+(defun kill-inner-word ()
+  "Kills the entire word your cursor is in. Equivalent to 'ciw' in vim."
+  (interactive)
+  (forward-char 1)
+  (backward-word)
+  (kill-word 1))
+(global-set-key (kbd "C-c w k") 'kill-inner-word)
+#+END_SRC
+** copy whole word no matter where the cursor is
+#+BEGIN_SRC emacs-lisp
+(defun copy-whole-word ()
+  (interactive)
+  (save-excursion
+    (forward-char 1)
+    (backward-word)
+    (kill-word 1)
+    (yank)))
+(global-set-key (kbd "C-c w c") 'copy-whole-word)
+#+END_SRC
+** copy whole line regardless the cursor is
+#+BEGIN_SRC emacs-lisp
+(defun copy-whole-line ()
+  "Copies a line without regard for cursor position."
+  (interactive)
+  (save-excursion
+    (kill-new
+     (buffer-substring
+      (point-at-bol)
+      (point-at-eol)))))
+(global-set-key (kbd "C-c l c") 'copy-whole-line)
+#+END_SRC
+* Sorting and filtering
+** ivy-prescient
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-prescient
+    :ensure t
+    :init (ivy-prescient-mode))
+
+#+END_SRC
+** company-prescient
+#+BEGIN_SRC emacs-lisp
+  (use-package company-prescient
+    :ensure t
+    :init (company-prescient-mode))
+#+END_SRC
+* word-lookup
+#+BEGIN_SRC emacs-lisp
+  (defun word-lookup ()
+    "Look up the word in cursor"
+    (interactive)
+    (browse-url (concat "https://www.oxfordlearnersdictionaries.com/definition/english/" (thing-at-point 'word))))
+
+  (global-set-key (kbd "<C-f1>") 'word-lookup)
+#+END_SRC
