@@ -198,6 +198,12 @@
     :config
     (add-hook 'gitignore-mode-hook (lambda () (setq require-final-newline t))))
 #+END_SRC
+#+begin_src emacs-lisp
+  (use-package ssh-agency
+    :ensure t
+    :config
+    (setenv "SSH_ASKPASS" "git-gui-askpass"))
+#+end_src
 * projectile
 ** counsel-projectile
 #+BEGIN_SRC emacs-lisp
