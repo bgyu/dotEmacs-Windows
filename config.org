@@ -86,7 +86,8 @@
 #+END_SRC
 ** full screen after startup
 #+BEGIN_SRC emacs-lisp
-  (toggle-frame-fullscreen)
+  ;; (toggle-frame-fullscreen)
+  (toggle-frame-maximized)
 #+END_SRC
 ** show buffer file name
 #+begin_src emacs-lisp
@@ -393,3 +394,9 @@
 
   (global-set-key (kbd "<C-f1>") 'word-lookup)
 #+END_SRC
+* dired
+** set default target directory
+#+begin_src emacs-lisp
+  (setq dired-dwim-target t)
+#+end_src
+
