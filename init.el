@@ -27,7 +27,7 @@
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(package-selected-packages
-   '(ssh-agency counsel-projectile counel-projectile company-clang htmlize mark-multiple fancy-battery flycheck ivy-rich all-the-icons-ivy expand-region projectile gitignore-mode magit counsel ivy ivy-mode swiper popup-kill popup-kill-ring dmenu symon diminish spaceline company dashboard rainbow-delimiters autopair hungry-delete ace-window rainbow-mode avy smex ido-vertical-mode org-bullets beacon spacemacs-theme which-key use-package use-pacakge)))
+   '(counsel-projectile counel-projectile company-clang htmlize mark-multiple fancy-battery flycheck ivy-rich all-the-icons-ivy expand-region projectile gitignore-mode magit counsel ivy ivy-mode swiper popup-kill popup-kill-ring dmenu symon diminish spaceline company dashboard rainbow-delimiters autopair hungry-delete ace-window rainbow-mode avy smex ido-vertical-mode org-bullets beacon spacemacs-theme which-key use-package use-pacakge)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
