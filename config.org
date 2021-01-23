@@ -38,8 +38,8 @@
 #+END_SRC
 ** show line number and column number
 #+BEGIN_SRC emacs-lisp
-(global-linum-mode 1)
-(column-number-mode 1)
+  ;; (global-linum-mode 1)
+  (column-number-mode 1)
 #+END_SRC
 ** Change yes-or-no questions into y-or-n questions
 #+BEGIN_SRC emacs-lisp
@@ -64,7 +64,8 @@
 #+END_SRC
 ** highlight current line
 #+BEGIN_SRC emacs-lisp
-  (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
+  ;; (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
+  (global-display-line-numbers-mode)
 #+END_SRC
 ** recent-open-files
 #+BEGIN_SRC emacs-lisp
