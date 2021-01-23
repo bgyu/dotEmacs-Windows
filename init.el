@@ -37,3 +37,6 @@
  '(swiper-minibuffer-match-face-2 ((t :background "#bbbbbb" :weight bold)))
  '(swiper-minibuffer-match-face-3 ((t :background "#bbbbff" :weight bold)))
  '(swiper-minibuffer-match-face-4 ((t :background "#ffbbff" :weight bold))))
+
+  ;; Set current line number's foreground to yellow
+  (set-face-foreground 'line-number-current-line "#FFFF00")
