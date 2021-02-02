@@ -38,5 +38,9 @@
  '(swiper-minibuffer-match-face-3 ((t :background "#bbbbff" :weight bold)))
  '(swiper-minibuffer-match-face-4 ((t :background "#ffbbff" :weight bold))))
 
-  ;; Set current line number's foreground to yellow
-  (set-face-foreground 'line-number-current-line "#FFFF00")
+;; Set current line number's foreground to yellow
+(set-face-foreground 'line-number-current-line "#FFFF00")
+
+;; Set default font
+(set-face-attribute 'default nil :font "Source Code Pro 14")
+
